@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>House of Kāla</title>
+  <!-- Universal Editorial Serif Font: Cormorant Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-container">
+      <a href="#" class="brand-logo" onclick="resetAllFilters()">
+        <span class="devanagari">काल</span>
+        <span class="brand-title">HOUSE OF KĀLA</span>
+      </a>
+
+      <nav class="main-nav">
+        <ul class="nav-list">
+          <li class="nav-item has-megamenu" id="watchmakersTrigger">
+            <button class="nav-link" aria-expanded="false">Watchmakers <span class="chevron">▾</span></button>
+          </li>
+          <li class="nav-item"><a href="/byo.html" class="nav-link">Build Your Own</a></li>
+          <li class="nav-item"><a href="/heritage.html" class="nav-link">Heritage</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <span class="active-brand-badge" id="activeBrandBadge" style="display: none;">
+          <span id="badgeText">All</span>
+          <button onclick="filterByBrand('all')" aria-label="Clear brand filter">×</button>
+        </span>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- WATCHMAKERS MENU DROPDOWN -->
+    <div class="mega-menu" id="megaMenu">
+      <div class="mega-menu-inner">
+        <div class="mega-col primary-col">
+          <span class="mega-label">Explore Watchmakers</span>
+          <ul class="mega-primary-list">
+            <li><button onclick="selectBrandFromMenu('all')">All Watchmakers</button></li>
+            <li><button onclick="selectBrandFromMenu('Citizen')">Citizen</button></li>
+            <li><button onclick="selectBrandFromMenu('HMT')">HMT</button></li>
+            <li><button onclick="selectBrandFromMenu('Favre-Leuba')">Favre-Leuba</button></li>
+            <li><button onclick="selectBrandFromMenu('Seiko')">Seiko</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+
+  <!-- Editorial Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <p class="hero-eyebrow">EST. NEW DELHI &bull; CURATED HOROLOGY</p>
+      <h1 class="hero-title">An Era to be &amp; You.</h1>
+      <p class="hero-subtitle">Procured vintage mechanical timepieces, hand-refurbished with Indian craftsmanship and timeless restraint.</p>
+      <a href="#catalog" class="btn-primary">Explore The Archive</a>
+    </div>
+  </section>
+
+  <!-- Main Catalog & Standard Filter Bar -->
+  <main class="catalog-section" id="catalog">
+    <div class="catalog-header">
+      <div>
+        <h2 class="section-title" id="catalogHeading">All Timepieces</h2>
+        <p class="item-count" id="itemCount">Showing 2 curated watches</p>
+      </div>
+
+      <div class="utility-filters">
+        <div class="filter-group">
+          <label for="movementFilter">Movement</label>
+          <select id="movementFilter" onchange="applyFilters()">
+            <option value="all">All Movements</option>
+            <option value="Manual Wind">Manual Wind</option>
+            <option value="Automatic">Automatic</option>
+            <option value="Quartz">Quartz</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="conditionFilter">Grade</label>
+          <select id="conditionFilter" onchange="applyFilters()">
+            <option value="all">All Grades</option>
+            <option value="Mint">Mint / NOS</option>
+            <option value="Refurbished">Kāla Refurbished</option>
+            <option value="Patina">Original Patina</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="priceSort">Sort By</label>
+          <select id="priceSort" onchange="applyFilters()">
+            <option value="featured">Featured</option>
+            <option value="low-to-high">Price: Low to High</option>
+            <option value="high-to-low">Price: High to Low</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compact Apple-Style Product Cards Grid -->
+    <div class="watch-grid" id="watchGrid"></div>
+  </main>
+
+  <!-- FULL WATCH DETAILS MODAL -->
+  <div class="product-modal-backdrop" id="productModalBackdrop" aria-hidden="true">
+    <div class="product-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">×</button>
+
+      <div class="modal-grid">
+        <!-- Left Side: Scrollable / Swipeable Multi-Image Gallery Only -->
+        <div class="modal-gallery-col">
+          <div class="gallery-scroller-wrap">
+            <button type="button" class="gallery-arrow prev" id="prevImgBtn" aria-label="Previous image">‹</button>
+            <div class="modal-photo-track" id="modalPhotoTrack"></div>
+            <button type="button" class="gallery-arrow next" id="nextImgBtn" aria-label="Next image">›</button>
+          </div>
+          <div class="gallery-dots" id="galleryDots"></div>
+        </div>
+
+        <!-- Right Side: Full Information & Divider-Separated Specs -->
+        <div class="modal-details-col">
+          <span class="modal-eyebrow" id="modalEyebrow">CURATED ARCHIVE</span>
+          <h2 class="modal-title" id="modalTitle">Watch Name</h2>
+          <p class="modal-price" id="modalPrice">₹0</p>
+          <p class="modal-description" id="modalDescription"></p>
+
+          <div class="modal-specs-list" id="modalSpecsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer" id="heritage">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="devanagari">काल</span>
+        <h3>HOUSE OF KĀLA</h3>
+        <p>Preserving mechanical heritage in India &amp; beyond.</p>
+      </div>
+      <div class="footer-note">
+        <p>&copy; 2026 House of Kāla. Every timepiece authenticated &amp; serviced.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
