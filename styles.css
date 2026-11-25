@@ -812,7 +812,7 @@ input {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: url("/images/b.jpeg");
+  background-image: url("./images/b.jpeg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -821,6 +821,7 @@ input {
   will-change: transform, filter;
   z-index: 0;
 }
+
 
 .heritage-wall::after {
   content: "";
