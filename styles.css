@@ -822,7 +822,6 @@ input {
   z-index: 0;
 }
 
-
 .heritage-wall::after {
   content: "";
   position: absolute;
