@@ -20,10 +20,12 @@
         <span class="brand-title">HOUSE OF KĀLA</span>
       </a>
 
-      <nav class="main-nav">
+      <nav class="main-nav" aria-label="Primary Navigation">
         <ul class="nav-list">
           <li class="nav-item has-megamenu" id="watchmakersTrigger">
-            <button class="nav-link" aria-expanded="false">Watchmakers <span class="chevron">▾</span></button>
+            <button type="button" class="nav-link" aria-expanded="false" aria-controls="megaMenu">
+              Watchmakers <span class="chevron">▾</span>
+            </button>
           </li>
           <li class="nav-item"><a href="byo.html" class="nav-link">Build Your Own</a></li>
           <li class="nav-item"><a href="heritage.html" class="nav-link">Heritage</a></li>
@@ -33,26 +35,39 @@
       <div class="nav-actions">
         <span class="active-brand-badge" id="activeBrandBadge" style="display: none;">
           <span id="badgeText">All</span>
-          <button onclick="filterByBrand('all')" aria-label="Clear brand filter">×</button>
+          <button type="button" onclick="filterByBrand('all')" aria-label="Clear brand filter">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
         </span>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu">
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu" aria-expanded="false" aria-controls="megaMenu">
           <span></span>
           <span></span>
         </button>
       </div>
     </div>
 
-    <!-- WATCHMAKERS MENU DROPDOWN -->
+    <!-- WATCHMAKERS & MOBILE MENU DROPDOWN -->
     <div class="mega-menu" id="megaMenu">
       <div class="mega-menu-inner">
         <div class="mega-col primary-col">
           <span class="mega-label">Explore Watchmakers</span>
           <ul class="mega-primary-list">
-            <li><button onclick="selectBrandFromMenu('all')">All Watchmakers</button></li>
-            <li><button onclick="selectBrandFromMenu('Citizen')">Citizen</button></li>
-            <li><button onclick="selectBrandFromMenu('HMT')">HMT (Hindustan Machine Tools)</button></li>
-            <li><button onclick="selectBrandFromMenu('Favre-Leuba')">Favre-Leuba</button></li>
-            <li><button onclick="selectBrandFromMenu('Seiko')">Seiko</button></li>
+            <li><button type="button" onclick="selectBrandFromMenu('all')">All Watchmakers</button></li>
+            <li><button type="button" onclick="selectBrandFromMenu('Citizen')">Citizen</button></li>
+            <li><button type="button" onclick="selectBrandFromMenu('HMT')">HMT (Hindustan Machine Tools)</button></li>
+            <li><button type="button" onclick="selectBrandFromMenu('Favre-Leuba')">Favre-Leuba</button></li>
+            <li><button type="button" onclick="selectBrandFromMenu('Seiko')">Seiko</button></li>
+          </ul>
+        </div>
+
+        <!-- Mobile-only navigation links for BYO & Heritage -->
+        <div class="mega-col mobile-pages-col">
+          <span class="mega-label">Pages</span>
+          <ul class="mega-page-list">
+            <li><a href="byo.html" class="mega-page-link" onclick="closeMenu()">Build Your Own</a></li>
+            <li><a href="heritage.html" class="mega-page-link" onclick="closeMenu()">Heritage</a></li>
           </ul>
         </div>
       </div>
@@ -118,15 +133,30 @@
   <!-- FULL WATCH DETAILS MODAL -->
   <div class="product-modal-backdrop" id="productModalBackdrop" aria-hidden="true">
     <div class="product-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-      <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">×</button>
+      <!-- Dedicated top bar above content so close button never pushes/cranks the card -->
+      <div class="modal-top-bar">
+        <button type="button" class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
 
       <div class="modal-grid">
         <!-- Left Side: Scrollable / Swipeable Multi-Image Gallery Only -->
         <div class="modal-gallery-col">
           <div class="gallery-scroller-wrap">
-            <button type="button" class="gallery-arrow prev" id="prevImgBtn" aria-label="Previous image">‹</button>
+            <button type="button" class="gallery-arrow prev" id="prevImgBtn" aria-label="Previous image">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
             <div class="modal-photo-track" id="modalPhotoTrack"></div>
-            <button type="button" class="gallery-arrow next" id="nextImgBtn" aria-label="Next image">›</button>
+            <button type="button" class="gallery-arrow next" id="nextImgBtn" aria-label="Next image">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
           </div>
           <div class="gallery-dots" id="galleryDots"></div>
         </div>

@@ -90,11 +90,17 @@ function formatManualDualPrice(watch) {
 function openMenu() {
   siteHeader.classList.add("menu-open");
   menuBackdrop.classList.add("active");
+  if (mobileMenuBtn) mobileMenuBtn.setAttribute("aria-expanded", "true");
+  const triggerBtn = watchmakersTrigger && watchmakersTrigger.querySelector("button");
+  if (triggerBtn) triggerBtn.setAttribute("aria-expanded", "true");
 }
 
 function closeMenu() {
   siteHeader.classList.remove("menu-open");
   menuBackdrop.classList.remove("active");
+  if (mobileMenuBtn) mobileMenuBtn.setAttribute("aria-expanded", "false");
+  const triggerBtn = watchmakersTrigger && watchmakersTrigger.querySelector("button");
+  if (triggerBtn) triggerBtn.setAttribute("aria-expanded", "false");
 }
 
 watchmakersTrigger.addEventListener("mouseenter", () => {
@@ -180,7 +186,7 @@ function renderWatches(list) {
     watchGrid.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
         <p style="font-size: 1.65rem; margin-bottom: 14px;">No timepieces match this exact combination.</p>
-        <button class="btn-primary" onclick="resetAllFilters()">Reset Filters</button>
+        <button type="button" class="btn-primary" onclick="resetAllFilters()">Reset Filters</button>
       </div>
     `;
     return;
@@ -261,8 +267,8 @@ function renderModalGallery() {
     .join("");
 
   const showArrows = imgs.length > 1;
-  prevImgBtn.style.display = showArrows ? "flex" : "none";
-  nextImgBtn.style.display = showArrows ? "flex" : "none";
+  prevImgBtn.style.display = showArrows ? "grid" : "none";
+  nextImgBtn.style.display = showArrows ? "grid" : "none";
 }
 
 function scrollToGalleryIndex(idx) {
