@@ -107,8 +107,20 @@ watchmakersTrigger.addEventListener("mouseenter", () => {
   if (window.innerWidth > 860) openMenu();
 });
 
-siteHeader.addEventListener("mouseleave", () => {
-  if (window.innerWidth > 860) closeMenu();
+// Close dropdown as soon as cursor moves onto other nav items or logo
+document.querySelectorAll(".main-nav .nav-item:not(#watchmakersTrigger), .brand-logo").forEach((el) => {
+  el.addEventListener("mouseenter", () => {
+    if (window.innerWidth > 860) closeMenu();
+  });
+});
+
+// Close when cursor moves into the page below the mega menu
+document.addEventListener("mouseover", (e) => {
+  if (window.innerWidth > 860 && siteHeader.classList.contains("menu-open")) {
+    if (!e.target.closest(".site-header")) {
+      closeMenu();
+    }
+  }
 });
 
 watchmakersTrigger.addEventListener("click", () => {
