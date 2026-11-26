@@ -299,6 +299,14 @@ if (toggleZoomBtn) {
   });
 }
 
+function updateSlideOriginFromClientPoint(slide, img, clientX, clientY) {
+  const rect = slide.getBoundingClientRect();
+  if (!rect.width || !rect.height) return;
+  const xPct = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+  const yPct = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+  img.style.transformOrigin = `${xPct}% ${yPct}%`;
+}
+
 function attachSlideZoomPan() {
   modalPhotoTrack.querySelectorAll(".modal-slide").forEach((slide) => {
     const img = slide.querySelector("img");
@@ -306,11 +314,19 @@ function attachSlideZoomPan() {
 
     slide.addEventListener("mousemove", (e) => {
       if (!slide.classList.contains("is-zoomed")) return;
-      const rect = slide.getBoundingClientRect();
-      const xPct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-      const yPct = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
-      img.style.transformOrigin = `${xPct}% ${yPct}%`;
+      updateSlideOriginFromClientPoint(slide, img, e.clientX, e.clientY);
     });
+
+    slide.addEventListener(
+      "touchmove",
+      (e) => {
+        if (!slide.classList.contains("is-zoomed") || !e.touches.length) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        updateSlideOriginFromClientPoint(slide, img, touch.clientX, touch.clientY);
+      },
+      { passive: false }
+    );
 
     slide.addEventListener("click", () => {
       if (slide.classList.contains("is-zoomed")) {

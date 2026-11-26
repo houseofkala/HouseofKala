@@ -27,6 +27,7 @@
 html {
   scroll-behavior: smooth;
   scrollbar-gutter: stable;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -36,7 +37,7 @@ body {
   font-size: 17px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 button,
@@ -44,6 +45,15 @@ select,
 input,
 textarea {
   font-family: var(--font-universal);
+}
+
+/* Prevent iOS Safari auto-zoom on form focus */
+@media (max-width: 860px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* Shared crisp centered SVG icon styling */
@@ -174,8 +184,8 @@ textarea {
   background: none;
   border: none;
   color: var(--bg-beige);
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -197,12 +207,13 @@ textarea {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  width: 36px;
-  height: 36px;
-  padding: 8px;
+  width: 40px;
+  height: 40px;
+  padding: 10px;
   background: none;
   border: none;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-menu-btn span {
@@ -275,6 +286,7 @@ textarea {
   text-align: left;
   cursor: pointer;
   display: inline-block;
+  padding: 4px 0;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -396,6 +408,7 @@ textarea {
   padding: 13px 32px;
   border-radius: 999px;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition: background-color 0.25s ease;
 }
 
@@ -457,12 +470,13 @@ textarea {
 
 .filter-group select {
   appearance: none;
+  -webkit-appearance: none;
   background-color: var(--bg-card);
   border: 1px solid var(--border-subtle);
   color: var(--ink-primary);
   font-size: 1rem;
   font-weight: 600;
-  padding: 9px 38px 9px 16px;
+  padding: 10px 38px 10px 16px;
   border-radius: 999px;
   cursor: pointer;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231C1917' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
@@ -496,6 +510,7 @@ textarea {
   align-items: center;
   text-align: center;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 6px 24px rgba(28, 25, 23, 0.05);
   border: 1px solid rgba(28, 25, 23, 0.06);
   transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
@@ -579,6 +594,7 @@ textarea {
   justify-content: center;
   padding: 16px 20px;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .product-modal-backdrop.open {
@@ -589,8 +605,9 @@ textarea {
   position: relative;
   width: 100%;
   max-width: 1180px;
-  max-height: 94vh;
+  max-height: 94dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: var(--bg-card);
   border-radius: 24px;
   padding: 16px 36px 24px;
@@ -619,8 +636,8 @@ textarea {
 
 .modal-close-btn {
   flex-shrink: 0;
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   border-radius: 50%;
   border: none;
@@ -629,6 +646,7 @@ textarea {
   cursor: pointer;
   display: grid;
   place-items: center;
+  -webkit-tap-highlight-color: transparent;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
 
@@ -679,6 +697,7 @@ textarea {
   border-radius: 18px;
   background-color: var(--bg-beige);
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal-photo-track::-webkit-scrollbar {
@@ -694,6 +713,12 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: pan-x;
+}
+
+.modal-slide.is-zoomed {
+  cursor: zoom-out;
+  touch-action: none;
 }
 
 .modal-slide img {
@@ -708,10 +733,6 @@ textarea {
   transform-origin: center center;
   transition: transform 0.22s ease-out;
   will-change: transform, transform-origin;
-}
-
-.modal-slide.is-zoomed {
-  cursor: zoom-out;
 }
 
 .modal-slide.is-zoomed img {
@@ -734,6 +755,7 @@ textarea {
   cursor: pointer;
   display: grid;
   place-items: center;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 4px 12px rgba(28, 25, 23, 0.14);
   transition: background-color 0.2s ease, color 0.2s ease;
 }
@@ -776,6 +798,7 @@ textarea {
   cursor: pointer;
   display: grid;
   place-items: center;
+  -webkit-tap-highlight-color: transparent;
   box-shadow: 0 4px 12px rgba(28, 25, 23, 0.14);
   transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
@@ -809,13 +832,14 @@ textarea {
 }
 
 .gallery-dot {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
   padding: 0;
   border-radius: 50%;
   border: none;
   background-color: rgba(28, 25, 23, 0.22);
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
@@ -874,6 +898,7 @@ textarea {
 .spec-label {
   color: var(--ink-muted);
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .spec-value {
@@ -884,7 +909,7 @@ textarea {
 
 .modal-contact-btn {
   margin-top: 16px;
-  padding: 11px 28px;
+  padding: 12px 28px;
   width: 100%;
   text-align: center;
 }
@@ -924,7 +949,7 @@ textarea {
    BUILD YOUR OWN PAGE
    ========================================= */
 .byo-page {
-  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -965,7 +990,7 @@ textarea {
    ========================================= */
 .heritage-wall {
   position: relative;
-  min-height: calc(100vh - var(--header-height));
+  min-height: calc(100dvh - var(--header-height));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1048,8 +1073,9 @@ textarea {
   display: none;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .inquiry-modal-backdrop.open {
@@ -1060,11 +1086,12 @@ textarea {
   position: relative;
   width: 100%;
   max-width: 520px;
-  max-height: 92vh;
+  max-height: 92dvh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: var(--bg-card);
   border-radius: 24px;
-  padding: 24px 32px 32px;
+  padding: 22px 28px 28px;
   box-shadow: 0 28px 70px rgba(28, 25, 23, 0.26);
   animation: modalFadeUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -1090,13 +1117,13 @@ textarea {
 .inquiry-subtitle {
   font-size: 1.02rem;
   color: var(--ink-muted);
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .inquiry-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
 .inquiry-field {
@@ -1136,7 +1163,7 @@ textarea {
 
 .inquiry-field textarea {
   resize: vertical;
-  min-height: 88px;
+  min-height: 82px;
 }
 
 .inquiry-error {
@@ -1203,14 +1230,15 @@ textarea {
   }
 
   .site-header.menu-open .mega-menu {
-    max-height: calc(100vh - var(--header-height));
+    max-height: calc(100dvh - var(--header-height));
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .mega-menu-inner {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 24px 24px 40px;
+    gap: 24px;
+    padding: 24px 24px 36px;
   }
 
   .mega-primary-list button,
@@ -1218,33 +1246,69 @@ textarea {
     font-size: 1.65rem;
   }
 
+  .catalog-section {
+    padding: 40px 20px 72px;
+  }
+
+  .catalog-header {
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
   .utility-filters {
     width: 100%;
+    gap: 12px;
   }
 
   .filter-group {
     flex: 1 1 30%;
-    min-width: 140px;
+    min-width: 120px;
+  }
+
+  .product-modal-backdrop {
+    padding: 12px;
   }
 
   .modal-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 16px;
   }
 
   .modal-photo-track {
-    max-height: 440px;
+    max-height: 340px;
+  }
+
+  .modal-title {
+    font-size: 1.75rem;
+  }
+
+  .spec-row {
+    padding: 7px 0;
+    font-size: 0.94rem;
   }
 
   .product-modal-card {
+    padding: 14px 18px 20px;
+    border-radius: 20px;
+  }
+
+  .inquiry-modal-card {
     padding: 18px 20px 24px;
     border-radius: 20px;
+  }
+
+  .inquiry-title {
+    font-size: 1.7rem;
   }
 }
 
 @media (max-width: 600px) {
   .nav-container {
-    padding: 0 20px;
+    padding: 0 18px;
   }
 
   .heritage-wall {
@@ -1261,17 +1325,43 @@ textarea {
     border-radius: 18px;
   }
 
+  .card-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.11em;
+    margin-bottom: 8px;
+  }
+
+  .card-media-stage {
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
   .card-title {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+    line-height: 1.15;
   }
 
   .card-meta {
-    font-size: 0.88rem;
+    font-size: 0.84rem;
+    margin-bottom: 8px;
+  }
+
+  .card-price {
+    font-size: 0.98rem;
   }
 
   .gallery-arrow {
     width: 36px;
     height: 36px;
+  }
+
+  .gallery-zoom-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .site-footer {
+    padding: 36px 20px;
   }
 }
 
@@ -1282,7 +1372,7 @@ textarea {
   }
 
   .hero {
-    padding: 56px 20px;
+    padding: 52px 20px;
   }
 
   .filter-group {
