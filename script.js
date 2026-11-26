@@ -50,6 +50,7 @@ const watches = [
 let selectedBrand = "all";
 let activeWatch = null;
 let activeImageIndex = 0;
+let isSlideZoomed = false;
 
 // DOM Elements
 const siteHeader = document.getElementById("siteHeader");
@@ -68,6 +69,8 @@ const closeModalBtn = document.getElementById("closeModalBtn");
 const modalPhotoTrack = document.getElementById("modalPhotoTrack");
 const prevImgBtn = document.getElementById("prevImgBtn");
 const nextImgBtn = document.getElementById("nextImgBtn");
+const toggleZoomBtn = document.getElementById("toggleZoomBtn");
+const zoomBtnIcon = document.getElementById("zoomBtnIcon");
 const galleryDots = document.getElementById("galleryDots");
 const modalEyebrow = document.getElementById("modalEyebrow");
 const modalTitle = document.getElementById("modalTitle");
@@ -114,7 +117,7 @@ document.querySelectorAll(".main-nav .nav-item:not(#watchmakersTrigger), .brand-
   });
 });
 
-// Close when cursor moves into the page below the mega menu
+// Close when cursor moves outside the header area
 document.addEventListener("mouseover", (e) => {
   if (window.innerWidth > 860 && siteHeader.classList.contains("menu-open")) {
     if (!e.target.closest(".site-header")) {
@@ -223,7 +226,7 @@ function renderWatches(list) {
 }
 
 // =========================================
-// FULL PRODUCT DETAIL MODAL + SCROLL GALLERY
+// FULL PRODUCT DETAIL MODAL + MANUAL ZOOM GALLERY
 // =========================================
 function openProductModal(watchId) {
   const watch = watches.find((w) => w.id === watchId);
@@ -247,13 +250,80 @@ function openProductModal(watchId) {
 }
 
 function closeProductModal() {
+  resetAllSlideZooms();
   productModalBackdrop.classList.remove("open");
   productModalBackdrop.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
 }
 
+function updateZoomButtonUI() {
+  if (!toggleZoomBtn || !zoomBtnIcon) return;
+  toggleZoomBtn.classList.toggle("active", isSlideZoomed);
+  toggleZoomBtn.setAttribute("aria-pressed", String(isSlideZoomed));
+  toggleZoomBtn.title = isSlideZoomed ? "Zoom out" : "Zoom in";
+
+  zoomBtnIcon.innerHTML = isSlideZoomed
+    ? `<circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5M8 11h6" />`
+    : `<circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5M11 8v6M8 11h6" />`;
+}
+
+function resetAllSlideZooms() {
+  isSlideZoomed = false;
+  modalPhotoTrack.querySelectorAll(".modal-slide").forEach((slide) => {
+    slide.classList.remove("is-zoomed");
+    const img = slide.querySelector("img");
+    if (img) img.style.transformOrigin = "center center";
+  });
+  updateZoomButtonUI();
+}
+
+function toggleCurrentSlideZoom() {
+  const slides = modalPhotoTrack.querySelectorAll(".modal-slide");
+  const currentSlide = slides[activeImageIndex];
+  if (!currentSlide) return;
+
+  isSlideZoomed = !isSlideZoomed;
+  currentSlide.classList.toggle("is-zoomed", isSlideZoomed);
+
+  const img = currentSlide.querySelector("img");
+  if (img && !isSlideZoomed) {
+    img.style.transformOrigin = "center center";
+  }
+  updateZoomButtonUI();
+}
+
+if (toggleZoomBtn) {
+  toggleZoomBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleCurrentSlideZoom();
+  });
+}
+
+function attachSlideZoomPan() {
+  modalPhotoTrack.querySelectorAll(".modal-slide").forEach((slide) => {
+    const img = slide.querySelector("img");
+    if (!img) return;
+
+    slide.addEventListener("mousemove", (e) => {
+      if (!slide.classList.contains("is-zoomed")) return;
+      const rect = slide.getBoundingClientRect();
+      const xPct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+      const yPct = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+      img.style.transformOrigin = `${xPct}% ${yPct}%`;
+    });
+
+    slide.addEventListener("click", () => {
+      if (slide.classList.contains("is-zoomed")) {
+        resetAllSlideZooms();
+      }
+    });
+  });
+}
+
 function renderModalGallery() {
   const imgs = activeWatch.images || [];
+  isSlideZoomed = false;
+  updateZoomButtonUI();
 
   modalPhotoTrack.innerHTML = imgs
     .map(
@@ -264,6 +334,8 @@ function renderModalGallery() {
     `
     )
     .join("");
+
+  attachSlideZoomPan();
 
   galleryDots.innerHTML = imgs
     .map(
@@ -287,6 +359,7 @@ function scrollToGalleryIndex(idx) {
   const imgs = (activeWatch && activeWatch.images) || [];
   if (imgs.length === 0) return;
 
+  resetAllSlideZooms();
   const clamped = Math.max(0, Math.min(idx, imgs.length - 1));
   activeImageIndex = clamped;
   modalPhotoTrack.scrollTo({
@@ -307,6 +380,7 @@ modalPhotoTrack.addEventListener("scroll", () => {
   if (!modalPhotoTrack.clientWidth) return;
   const newIndex = Math.round(modalPhotoTrack.scrollLeft / modalPhotoTrack.clientWidth);
   if (newIndex !== activeImageIndex) {
+    resetAllSlideZooms();
     activeImageIndex = newIndex;
     updateDots();
   }

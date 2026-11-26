@@ -1,6 +1,9 @@
 // =========================================
 // HOUSE OF KĀLA — PRODUCT & GENERAL INQUIRY MODAL
 // =========================================
+const INQUIRY_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbxb9HENQoFBzznWJR2L-en0itaB0-1rfbVHwS23A4rneBd_txRtbex2eK5Bo6oqq-Wn/exec";
+
 const inquiryModalBackdrop = document.getElementById("inquiryModalBackdrop");
 const closeInquiryModalBtn = document.getElementById("closeInquiryModalBtn");
 const inquiryForm = document.getElementById("inquiryForm");
@@ -17,6 +20,23 @@ const inquiryProductId = document.getElementById("inquiryProductId");
 const inquiryProductBrand = document.getElementById("inquiryProductBrand");
 const inquiryProductName = document.getElementById("inquiryProductName");
 const inquiryProductSpecs = document.getElementById("inquiryProductSpecs");
+
+const clientEmailInput = document.getElementById("clientEmail");
+const contactHandleInput = document.getElementById("contactHandle");
+const inquiryContactError = document.getElementById("inquiryContactError");
+
+function clearInquiryContactError() {
+  if (inquiryContactError) {
+    inquiryContactError.textContent = "";
+    inquiryContactError.style.display = "none";
+  }
+}
+
+function showInquiryError(message) {
+  if (!inquiryContactError) return;
+  inquiryContactError.textContent = message;
+  inquiryContactError.style.display = "block";
+}
 
 function buildWatchSpecSummary(watch) {
   const priceSummary =
@@ -57,6 +77,7 @@ function openInquiryModal(options = {}) {
   const isProduct = options.sourceType === "product" && options.productName;
 
   inquiryForm.reset();
+  clearInquiryContactError();
   inquiryForm.style.display = "flex";
   inquiryConfirmation.style.display = "none";
 
@@ -89,11 +110,28 @@ function openInquiryModal(options = {}) {
 
 function closeInquiryModal() {
   if (!inquiryModalBackdrop) return;
+  clearInquiryContactError();
   inquiryModalBackdrop.classList.remove("open");
   inquiryModalBackdrop.setAttribute("aria-hidden", "true");
   if (!productModalBackdrop || !productModalBackdrop.classList.contains("open")) {
     document.body.style.overflow = "";
   }
+}
+
+async function sendInquiryToGoogleSheet(payload) {
+  await fetch(INQUIRY_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(payload)
+  });
+}
+
+if (clientEmailInput) {
+  clientEmailInput.addEventListener("input", clearInquiryContactError);
+}
+
+if (contactHandleInput) {
+  contactHandleInput.addEventListener("input", clearInquiryContactError);
 }
 
 if (closeInquiryModalBtn) {
@@ -119,35 +157,66 @@ document.addEventListener("keydown", (e) => {
 });
 
 if (inquiryForm) {
+  const submitBtn = inquiryForm.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn ? submitBtn.textContent : "Submit";
+
   inquiryForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const payload = {
-      submittedAt: new Date().toISOString(),
-      sourceType: inquirySourceType.value, // "product" vs "inquiry"
-      productId: inquiryProductId.value,
-      productBrand: inquiryProductBrand.value,
-      productName: inquiryProductName.value,
-      productSpecs: inquiryProductSpecs.value,
-      name: document.getElementById("clientName").value.trim(),
-      email: document.getElementById("clientEmail").value.trim(),
-      preferredContact: document.getElementById("preferredContact").value,
-      phone: document.getElementById("contactHandle").value.trim(),
-      message: document.getElementById("clientMessage").value.trim()
-    };
+    const emailVal = clientEmailInput ? clientEmailInput.value.trim() : "";
+    const phoneVal = contactHandleInput ? contactHandleInput.value.trim() : "";
 
-    if (typeof window.onHouseOfKalaInquirySubmit === "function") {
-      await window.onHouseOfKalaInquirySubmit(payload);
+    if (!emailVal && !phoneVal) {
+      showInquiryError("Please provide either an email address or a Phone / WhatsApp number.");
+      if (clientEmailInput) clientEmailInput.focus();
+      return;
     }
 
-    const channel = payload.preferredContact;
-    inquiryConfirmationText.textContent =
-      payload.sourceType === "product"
-        ? `Thank you, ${payload.name}—we've logged your request for ${payload.productName} and will reach out via ${channel}.`
-        : `Thank you, ${payload.name}—we've logged your inquiry and will reach out via ${channel}.`;
+    clearInquiryContactError();
 
-    inquiryForm.style.display = "none";
-    inquiryConfirmation.style.display = "block";
+    const payload = {
+      submittedAt: new Date().toISOString(),
+      sourceType: inquirySourceType ? inquirySourceType.value : "inquiry",
+      productId: inquiryProductId ? inquiryProductId.value : "",
+      productBrand: inquiryProductBrand ? inquiryProductBrand.value : "",
+      productName: inquiryProductName ? inquiryProductName.value : "",
+      productSpecs: inquiryProductSpecs ? inquiryProductSpecs.value : "",
+      name: document.getElementById("clientName")?.value.trim() || "",
+      email: emailVal,
+      preferredContact: document.getElementById("preferredContact")?.value || "",
+      phone: phoneVal,
+      message: document.getElementById("clientMessage")?.value.trim() || ""
+    };
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+    }
+
+    try {
+      await sendInquiryToGoogleSheet(payload);
+
+      if (typeof window.onHouseOfKalaInquirySubmit === "function") {
+        await window.onHouseOfKalaInquirySubmit(payload);
+      }
+
+      const channel = payload.preferredContact || "your preferred channel";
+      inquiryConfirmationText.textContent =
+        payload.sourceType === "product"
+          ? `Thank you, ${payload.name}—we've logged your request for ${payload.productName} and will reach out via ${channel}.`
+          : `Thank you, ${payload.name}—we've logged your inquiry and will reach out via ${channel}.`;
+
+      inquiryForm.style.display = "none";
+      inquiryConfirmation.style.display = "block";
+    } catch (err) {
+      console.error("House of Kāla inquiry submission error:", err);
+      showInquiryError("Something went wrong while sending your inquiry. Please try again.");
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
+    }
   });
 }
 

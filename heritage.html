@@ -75,7 +75,7 @@
 
         <div class="inquiry-field">
           <label for="clientEmail">Email</label>
-          <input type="email" id="clientEmail" name="email" required placeholder="you@example.com" />
+          <input type="email" id="clientEmail" name="email" placeholder="you@example.com" />
         </div>
 
         <div class="inquiry-field">
@@ -88,7 +88,7 @@
         </div>
 
         <div class="inquiry-field">
-          <label for="contactHandle">Phone / WhatsApp Number (Optional)</label>
+          <label for="contactHandle">Phone / WhatsApp Number</label>
           <input type="tel" id="contactHandle" name="phone" placeholder="+91 98765 43210" />
         </div>
 
@@ -96,6 +96,8 @@
           <label for="clientMessage">Note or Question (Optional)</label>
           <textarea id="clientMessage" name="message" placeholder="Anything else you'd like to share..."></textarea>
         </div>
+
+        <p class="inquiry-error" id="inquiryContactError" role="alert" style="display: none;"></p>
 
         <button type="submit" class="btn-primary inquiry-submit-btn">Send Inquiry</button>
       </form>

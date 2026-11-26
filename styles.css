@@ -307,16 +307,51 @@ textarea {
 }
 
 /* =========================================
-   HERO SECTION
+   HERO SECTION (HERITAGE ART WALL BACKDROP)
    ========================================= */
 .hero {
-  padding: 84px 28px 72px;
+  position: relative;
+  padding: 88px 28px 76px;
   text-align: center;
   border-bottom: 1px solid var(--border-subtle);
-  background: radial-gradient(circle at top center, #FAF7F2 0%, var(--bg-beige) 75%);
+  background-color: #2A1215;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("./images/b.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: blur(16px) saturate(1.06);
+  transform: scale(1.12);
+  will-change: transform, filter;
+  z-index: 0;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+      circle at center,
+      rgba(28, 25, 23, 0.34) 0%,
+      rgba(28, 25, 23, 0.64) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(28, 25, 23, 0.32),
+      rgba(28, 25, 23, 0.56)
+    );
+  z-index: 1;
 }
 
 .hero-content {
+  position: relative;
+  z-index: 2;
   max-width: 680px;
   margin: 0 auto;
 }
@@ -324,9 +359,10 @@ textarea {
 .hero-eyebrow {
   font-size: 0.85rem;
   letter-spacing: 0.2em;
-  color: var(--crimson);
+  color: var(--bg-beige);
   font-weight: 700;
   margin-bottom: 16px;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.28);
 }
 
 .hero-title {
@@ -334,15 +370,17 @@ textarea {
   font-weight: 600;
   line-height: 1.1;
   margin-bottom: 18px;
-  color: var(--ink-primary);
+  color: var(--bg-beige);
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
 }
 
 .hero-subtitle {
   font-size: 1.2rem;
   font-weight: 500;
-  color: var(--ink-muted);
+  color: var(--bg-beige);
   max-width: 540px;
   margin: 0 auto 32px;
+  text-shadow: 0 1px 16px rgba(0, 0, 0, 0.22);
 }
 
 .btn-primary {
@@ -667,6 +705,18 @@ textarea {
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
+  transform-origin: center center;
+  transition: transform 0.22s ease-out;
+  will-change: transform, transform-origin;
+}
+
+.modal-slide.is-zoomed {
+  cursor: zoom-out;
+}
+
+.modal-slide.is-zoomed img {
+  transform: scale(2.15);
+  transition: transform 0.08s linear;
 }
 
 .gallery-arrow {
@@ -709,6 +759,47 @@ textarea {
 
 .gallery-arrow.next {
   right: 12px;
+}
+
+.gallery-zoom-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(28, 25, 23, 0.1);
+  background-color: rgba(250, 247, 242, 0.94); /* Warm cream */
+  color: var(--ink-primary);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 12px rgba(28, 25, 23, 0.14);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-zoom-btn:hover {
+  background-color: #FAF7F2;
+  color: var(--crimson);
+  transform: scale(1.05);
+}
+
+.gallery-zoom-btn.active {
+  background-color: var(--crimson);
+  color: #FAF7F2;
+  border-color: var(--crimson);
+}
+
+.gallery-zoom-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
 }
 
 .gallery-dots {
@@ -1046,6 +1137,13 @@ textarea {
 .inquiry-field textarea {
   resize: vertical;
   min-height: 88px;
+}
+
+.inquiry-error {
+  color: var(--crimson);
+  font-size: 0.96rem;
+  font-weight: 600;
+  margin-top: -4px;
 }
 
 .inquiry-submit-btn {

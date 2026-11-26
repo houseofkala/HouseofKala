@@ -144,7 +144,7 @@
       </div>
 
       <div class="modal-grid">
-        <!-- Left Side: Scrollable / Swipeable Multi-Image Gallery Only -->
+        <!-- Left Side: Scrollable / Swipeable Multi-Image Gallery + Cream Zoom Toggle -->
         <div class="modal-gallery-col">
           <div class="gallery-scroller-wrap">
             <button type="button" class="gallery-arrow prev" id="prevImgBtn" aria-label="Previous image">
@@ -156,6 +156,19 @@
             <button type="button" class="gallery-arrow next" id="nextImgBtn" aria-label="Next image">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="gallery-zoom-btn"
+              id="toggleZoomBtn"
+              aria-label="Toggle zoom"
+              aria-pressed="false"
+              title="Zoom in"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true" id="zoomBtnIcon">
+                <circle cx="11" cy="11" r="7" />
+                <path d="M20 20l-3.5-3.5M11 8v6M8 11h6" />
               </svg>
             </button>
           </div>
@@ -214,7 +227,7 @@
 
         <div class="inquiry-field">
           <label for="clientEmail">Email</label>
-          <input type="email" id="clientEmail" name="email" required placeholder="you@example.com" />
+          <input type="email" id="clientEmail" name="email" placeholder="you@example.com" />
         </div>
 
         <div class="inquiry-field">
@@ -227,7 +240,7 @@
         </div>
 
         <div class="inquiry-field">
-          <label for="contactHandle">Phone / WhatsApp Number (Optional)</label>
+          <label for="contactHandle">Phone / WhatsApp Number</label>
           <input type="tel" id="contactHandle" name="phone" placeholder="+91 98765 43210" />
         </div>
 
@@ -235,6 +248,8 @@
           <label for="clientMessage">Note or Question (Optional)</label>
           <textarea id="clientMessage" name="message" placeholder="Anything else you'd like to share..."></textarea>
         </div>
+
+        <p class="inquiry-error" id="inquiryContactError" role="alert" style="display: none;"></p>
 
         <button type="submit" class="btn-primary inquiry-submit-btn">Send Inquiry</button>
       </form>
