@@ -60,11 +60,11 @@ const watches = [
     description:
       "1970s Swiss space-age direct-read jump hour automatic featuring rotating hour, minute, and seconds discs behind a cobalt blue metallic dial plate with a vibrant orange-red center pointer and integrated link bracelet.",
     images: [
-      "/images/hoga auto/1.jpeg",
-      "/images/hoga auto/2.jpeg",
-      "/images/hoga auto/3.jpeg",
-      "/images/hoga auto/4.jpeg",
-      "/images/hoga auto/5.jpeg"
+      "./images/hoga auto/1.jpeg",
+      "./images/hoga auto/2.jpeg",
+      "./images/hoga auto/3.jpeg",
+      "./images/hoga auto/4.jpeg",
+      "./images/hoga auto/5.jpeg"
     ]
   },
   {
@@ -82,11 +82,11 @@ const watches = [
     description:
       "Vibrant 1970s Japanese cult classic featuring a textured metallic lime-green TV dial, jewel-set hour markers, applied gold Orient crest, bilingual English/Arabic day-date window, and quick-set day pusher at 2 o'clock.",
     images: [
-      "/images/orient green/1.jpeg",
-      "/images/orient green/2.jpeg",
-      "/images/orient green/3.jpeg",
-      "/images/orient green/4.jpeg",
-      "/images/orient green/5.jpeg"
+      "./images/orient green/1.jpeg",
+      "./images/orient green/2.jpeg",
+      "./images/orient green/3.jpeg",
+      "./images/orient green/4.jpeg",
+      "./images/orient green/5.jpeg"
     ]
   },
   {
@@ -104,11 +104,11 @@ const watches = [
     description:
       "Two-tone espresso and chocolate brown TV-style dial featuring a circular sunburst center chapter, gold-trimmed inner bezel ring, applied Tri-Star emblem, day-date window, and sculpted tonneau steel case.",
     images: [
-      "/images/orient maroon/1.jpeg",
-      "/images/orient maroon/2.jpeg",
-      "/images/orient maroon/3.jpeg",
-      "/images/orient maroon/4.jpeg",
-      "/images/orient maroon/5.jpeg"
+      "./images/orient maroon/1.jpeg",
+      "./images/orient maroon/2.jpeg",
+      "./images/orient maroon/3.jpeg",
+      "./images/orient maroon/4.jpeg",
+      "./images/orient maroon/5.jpeg"
     ]
   },
   {
@@ -126,10 +126,10 @@ const watches = [
     description:
       "1970s Swiss dress-sport classic featuring a textured matte terracotta-rust dial, applied gold baton indices, iconic hourglass emblem, framed day-date window, gold-tone fluted crown, and stitched brown leather strap.",
     images: [
-      "/images/favreluba red/1.jpeg",
-      "/images/favreluba red/2.jpeg",
-      "/images/favreluba red/3.jpeg",
-      "/images/favreluba red/4.jpeg"
+      "./images/favreluba red/1.jpeg",
+      "./images/favreluba red/2.jpeg",
+      "./images/favreluba red/3.jpeg",
+      "./images/favreluba red/4.jpeg"
     ]
   },
   {
@@ -147,11 +147,11 @@ const watches = [
     description:
       "Culturally rich Indian mechanical timepiece featuring a cream dial with Kannada script numerals, blue Gandaberunda emblem, blued steel hands, deep indigo leather strap, and an exhibition caseback revealing the 17-jewel hand-wound movement.",
     images: [
-      "/images/hmt gande/1.jpeg",
-      "/images/hmt gande/2.jpeg",
-      "/images/hmt gande/3.jpeg",
-      "/images/hmt gande/4.jpeg",
-      "/images/hmt gande/5.jpeg"
+      "./images/hmt gande/1.jpeg",
+      "./images/hmt gande/2.jpeg",
+      "./images/hmt gande/3.jpeg",
+      "./images/hmt gande/4.jpeg",
+      "./images/hmt gande/5.jpeg"
     ]
   }
 ];
