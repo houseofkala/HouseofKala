@@ -303,6 +303,17 @@ function applyFilters() {
   renderWatches(filtered);
 }
 
+function handleImageFallback(imgEl) {
+  if (!imgEl || imgEl.dataset.fallbackTried) return;
+  imgEl.dataset.fallbackTried = "true";
+  const src = imgEl.getAttribute("src") || "";
+  if (src.endsWith(".jpeg")) {
+    imgEl.src = src.slice(0, -5) + ".jpg";
+  } else if (src.endsWith(".jpg")) {
+    imgEl.src = src.slice(0, -4) + ".jpeg";
+  }
+}
+
 function renderWatches(list) {
   itemCount.textContent = `Showing ${list.length} curated ${list.length === 1 ? "watch" : "watches"}`;
 
@@ -323,7 +334,7 @@ function renderWatches(list) {
         <article class="watch-card" onclick="openProductModal(${w.id})">
           <span class="card-eyebrow">${w.brand} &bull; ${w.condition}</span>
           <div class="card-media-stage">
-            <img src="${coverSrc}" alt="${w.name}" loading="lazy" />
+            <img src="${coverSrc}" alt="${w.name}" loading="lazy" onerror="handleImageFallback(this)" />
           </div>
           <h3 class="card-title">${w.name}</h3>
           <p class="card-meta">${w.year} &bull; ${w.movement}</p>
@@ -454,7 +465,7 @@ function renderModalGallery() {
     .map(
       (src, idx) => `
       <div class="modal-slide">
-        <img src="${src}" alt="${activeWatch.name} — view ${idx + 1}" />
+        <img src="${src}" alt="${activeWatch.name} — view ${idx + 1}" onerror="handleImageFallback(this)" />
       </div>
     `
     )
