@@ -44,6 +44,115 @@ const watches = [
       "./images/HMT Janata/3.jpeg",
       "./images/HMT Janata/4.jpeg"
     ]
+  },
+  {
+    id: 3,
+    brand: "Hoga",
+    name: "Hoga Automatic Jump Hour",
+    year: "1970s",
+    movement: "Automatic",
+    condition: "Patina",
+    bracelet: "Integrated Stainless Steel Link Bracelet",
+    caseSize: "Hooded Space-Age Rectangular Case",
+    caliber: "Swiss 17-Jewel Automatic Direct-Read",
+    priceInr: 0,
+    priceUsd: 0,
+    description:
+      "1970s Swiss space-age direct-read jump hour automatic featuring rotating hour, minute, and seconds discs behind a cobalt blue metallic dial plate with a vibrant orange-red center pointer and integrated link bracelet.",
+    images: [
+      "/images/hoga auto/1.jpeg",
+      "/images/hoga auto/2.jpeg",
+      "/images/hoga auto/3.jpeg",
+      "/images/hoga auto/4.jpeg",
+      "/images/hoga auto/5.jpeg"
+    ]
+  },
+  {
+    id: 4,
+    brand: "Orient",
+    name: "Orient Crystal 21 Jewels (Lime TV Dial)",
+    year: "1970s",
+    movement: "Automatic",
+    condition: "Patina",
+    bracelet: "Multi-Row Brick-Link Stainless Steel Bracelet",
+    caseSize: "Stainless Steel TV-Case (Ref. OS469C033)",
+    caliber: "Orient Cal. 46941 / 46943 (21 Jewels, Quick-Set Pusher)",
+    priceInr: 0,
+    priceUsd: 0,
+    description:
+      "Vibrant 1970s Japanese cult classic featuring a textured metallic lime-green TV dial, jewel-set hour markers, applied gold Orient crest, bilingual English/Arabic day-date window, and quick-set day pusher at 2 o'clock.",
+    images: [
+      "/images/orient green/1.jpeg",
+      "/images/orient green/2.jpeg",
+      "/images/orient green/3.jpeg",
+      "/images/orient green/4.jpeg",
+      "/images/orient green/5.jpeg"
+    ]
+  },
+  {
+    id: 5,
+    brand: "Orient",
+    name: "Orient Tri-Star Crystal (Espresso TV Dial)",
+    year: "1970s",
+    movement: "Automatic",
+    condition: "Patina",
+    bracelet: "Vintage Multi-Link Stainless Steel Bracelet",
+    caseSize: "Stainless Steel Tonneau TV-Case (Ref. OS469C957)",
+    caliber: "Orient Cal. 46941 / 46943 (21 Jewels, Quick-Set Pusher)",
+    priceInr: 0,
+    priceUsd: 0,
+    description:
+      "Two-tone espresso and chocolate brown TV-style dial featuring a circular sunburst center chapter, gold-trimmed inner bezel ring, applied Tri-Star emblem, day-date window, and sculpted tonneau steel case.",
+    images: [
+      "/images/orient maroon/1.jpeg",
+      "/images/orient maroon/2.jpeg",
+      "/images/orient maroon/3.jpeg",
+      "/images/orient maroon/4.jpeg",
+      "/images/orient maroon/5.jpeg"
+    ]
+  },
+  {
+    id: 6,
+    brand: "Favre-Leuba",
+    name: "Favre-Leuba Genève Duomatic",
+    year: "1970s",
+    movement: "Automatic",
+    condition: "Patina",
+    bracelet: "18mm Dark Brown Stitched Genuine Leather Strap",
+    caseSize: "Stainless Steel Cushion Case (Ref. 59933 RM)",
+    caliber: "Swiss Favre-Leuba Duomatic Automatic",
+    priceInr: 0,
+    priceUsd: 0,
+    description:
+      "1970s Swiss dress-sport classic featuring a textured matte terracotta-rust dial, applied gold baton indices, iconic hourglass emblem, framed day-date window, gold-tone fluted crown, and stitched brown leather strap.",
+    images: [
+      "/images/favreluba red/1.jpeg",
+      "/images/favreluba red/2.jpeg",
+      "/images/favreluba red/3.jpeg",
+      "/images/favreluba red/4.jpeg"
+    ]
+  },
+  {
+    id: 7,
+    brand: "HMT",
+    name: "HMT Gandaberunda (Kannada Dial)",
+    year: "Vintage",
+    movement: "Manual Wind",
+    condition: "Refurbished",
+    bracelet: "Deep Indigo Stitched Genuine Leather Strap",
+    caseSize: "Polished Stainless Steel (Exhibition Caseback)",
+    caliber: "HMT 17-Jewel Manual Wind Mechanical",
+    priceInr: 0,
+    priceUsd: 0,
+    description:
+      "Culturally rich Indian mechanical timepiece featuring a cream dial with Kannada script numerals, blue Gandaberunda emblem, blued steel hands, deep indigo leather strap, and an exhibition caseback revealing the 17-jewel hand-wound movement.",
+    images: [
+      "/images/hmt gande/1.jpeg",
+      "/images/hmt gande/2.jpeg",
+      "/images/hmt gande/3.jpeg",
+      "/images/hmt gande/4.jpeg",
+      "/images/hmt gande/5.jpeg"
+    ]
   }
 ];
 
