@@ -22,7 +22,7 @@
         <span class="brand-title">HOUSE OF KĀLA</span>
       </a>
 
-      <nav class="main-nav">
+      <nav class="main-nav" aria-label="Primary Navigation">
         <ul class="nav-list">
           <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
           <li class="nav-item"><a href="byo.html" class="nav-link">Build Your Own</a></li>
@@ -31,9 +31,31 @@
         </ul>
       </nav>
 
-      <div class="nav-actions"></div>
+      <div class="nav-actions">
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu" aria-expanded="false" aria-controls="megaMenu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div class="mega-menu" id="megaMenu">
+      <div class="mega-menu-inner">
+        <div class="mega-col primary-col">
+          <span class="mega-label">Navigate</span>
+          <ul class="mega-page-list">
+            <li><a href="index.html" class="mega-page-link">Home</a></li>
+            <li><a href="byo.html" class="mega-page-link">Build Your Own</a></li>
+            <li><a href="heritage.html" class="mega-page-link" aria-current="page">Heritage</a></li>
+            <li><button type="button" class="mega-page-link" onclick="if (typeof closeMenu === 'function') closeMenu(); openInquiryModal({ sourceType: 'inquiry' });">Contact</button></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
 
   <!-- Heritage Art Wall -->
   <main class="heritage-wall">

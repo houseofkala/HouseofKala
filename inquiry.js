@@ -25,6 +25,36 @@ const clientEmailInput = document.getElementById("clientEmail");
 const contactHandleInput = document.getElementById("contactHandle");
 const inquiryContactError = document.getElementById("inquiryContactError");
 
+// Lightweight mobile menu support for subpages (byo.html, heritage.html) where script.js isn't loaded
+(function ensureSubpageMobileMenu() {
+  if (typeof openMenu === "function" && typeof closeMenu === "function") return;
+
+  const header = document.getElementById("siteHeader");
+  const menuBtn = document.getElementById("mobileMenuBtn");
+  const backdrop = document.getElementById("menuBackdrop");
+  if (!header || !menuBtn) return;
+
+  window.openMenu = function () {
+    header.classList.add("menu-open");
+    if (backdrop) backdrop.classList.add("active");
+    menuBtn.setAttribute("aria-expanded", "true");
+  };
+
+  window.closeMenu = function () {
+    header.classList.remove("menu-open");
+    if (backdrop) backdrop.classList.remove("active");
+    menuBtn.setAttribute("aria-expanded", "false");
+  };
+
+  menuBtn.addEventListener("click", () => {
+    header.classList.contains("menu-open") ? window.closeMenu() : window.openMenu();
+  });
+
+  if (backdrop) {
+    backdrop.addEventListener("click", window.closeMenu);
+  }
+})();
+
 function clearInquiryContactError() {
   if (inquiryContactError) {
     inquiryContactError.textContent = "";
@@ -113,7 +143,8 @@ function closeInquiryModal() {
   clearInquiryContactError();
   inquiryModalBackdrop.classList.remove("open");
   inquiryModalBackdrop.setAttribute("aria-hidden", "true");
-  if (!productModalBackdrop || !productModalBackdrop.classList.contains("open")) {
+  const prodBackdrop = document.getElementById("productModalBackdrop");
+  if (!prodBackdrop || !prodBackdrop.classList.contains("open")) {
     document.body.style.overflow = "";
   }
 }
@@ -221,9 +252,15 @@ if (inquiryForm) {
 }
 
 // Auto-open general inquiry modal if navigated from another page with ?contact=inquiry
-(function handleUrlInquiryParam() {
+function handleUrlInquiryParam() {
   const params = new URLSearchParams(window.location.search);
   if (params.get("contact") === "inquiry") {
     openInquiryModal({ sourceType: "inquiry" });
   }
-})();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", handleUrlInquiryParam);
+} else {
+  handleUrlInquiryParam();
+}

@@ -10,6 +10,7 @@ const watches = [
     year: "1980s - 1990s",
     movement: "Quartz",
     condition: "Mint",
+    soldOut: true,
     bracelet: "Dark Brown Alligator/Croc Embossed Leather",
     caseSize: "35mm Stainless Steel",
     caliber: "Citizen 6355 Quartz",
@@ -174,7 +175,9 @@ const badgeText = document.getElementById("badgeText");
 
 // Modal DOM Elements
 const productModalBackdrop = document.getElementById("productModalBackdrop");
+const productModalCard = document.querySelector(".product-modal-card");
 const closeModalBtn = document.getElementById("closeModalBtn");
+const galleryScrollerWrap = document.querySelector(".gallery-scroller-wrap");
 const modalPhotoTrack = document.getElementById("modalPhotoTrack");
 const prevImgBtn = document.getElementById("prevImgBtn");
 const nextImgBtn = document.getElementById("nextImgBtn");
@@ -186,6 +189,7 @@ const modalTitle = document.getElementById("modalTitle");
 const modalPrice = document.getElementById("modalPrice");
 const modalDescription = document.getElementById("modalDescription");
 const modalSpecsList = document.getElementById("modalSpecsList");
+const modalContactBtn = document.getElementById("modalContactBtn");
 
 // =========================================
 // MANUAL INR + USD PRICE FORMATTING
@@ -295,9 +299,19 @@ function applyFilters() {
   });
 
   if (sortOrder === "low-to-high") {
-    filtered.sort((a, b) => a.priceInr - b.priceInr);
+    filtered.sort((a, b) => {
+      if (a.priceInr === 0 && b.priceInr === 0) return 0;
+      if (a.priceInr === 0) return 1;
+      if (b.priceInr === 0) return -1;
+      return a.priceInr - b.priceInr;
+    });
   } else if (sortOrder === "high-to-low") {
-    filtered.sort((a, b) => b.priceInr - a.priceInr);
+    filtered.sort((a, b) => {
+      if (a.priceInr === 0 && b.priceInr === 0) return 0;
+      if (a.priceInr === 0) return 1;
+      if (b.priceInr === 0) return -1;
+      return b.priceInr - a.priceInr;
+    });
   }
 
   renderWatches(filtered);
@@ -330,11 +344,15 @@ function renderWatches(list) {
   watchGrid.innerHTML = list
     .map((w) => {
       const coverSrc = (w.images && w.images[0]) || "";
+      const soldOutBanner = w.soldOut
+        ? `<div class="sold-out-banner" aria-label="Sold out">Sold Out &bull; Archived</div>`
+        : "";
       return `
-        <article class="watch-card" onclick="openProductModal(${w.id})">
+        <article class="watch-card ${w.soldOut ? "is-sold-out" : ""}" onclick="openProductModal(${w.id})">
           <span class="card-eyebrow">${w.brand} &bull; ${w.condition}</span>
           <div class="card-media-stage">
             <img src="${coverSrc}" alt="${w.name}" loading="lazy" onerror="handleImageFallback(this)" />
+            ${soldOutBanner}
           </div>
           <h3 class="card-title">${w.name}</h3>
           <p class="card-meta">${w.year} &bull; ${w.movement}</p>
@@ -348,6 +366,40 @@ function renderWatches(list) {
 // =========================================
 // FULL PRODUCT DETAIL MODAL + MANUAL ZOOM GALLERY
 // =========================================
+function syncModalSoldOutBanner(isSoldOut) {
+  if (!galleryScrollerWrap) return;
+  let banner = galleryScrollerWrap.querySelector(".modal-sold-out-banner");
+
+  if (isSoldOut) {
+    if (!banner) {
+      banner = document.createElement("div");
+      banner.className = "sold-out-banner modal-sold-out-banner";
+      banner.setAttribute("aria-label", "Sold out");
+      banner.textContent = "Sold Out • Archived";
+      galleryScrollerWrap.appendChild(banner);
+    }
+  } else if (banner) {
+    banner.remove();
+  }
+}
+
+function resetGalleryToFirstImage() {
+  activeImageIndex = 0;
+  if (!modalPhotoTrack) return;
+
+  const prevBehavior = modalPhotoTrack.style.scrollBehavior;
+  modalPhotoTrack.style.scrollBehavior = "auto";
+  modalPhotoTrack.scrollLeft = 0;
+  updateDots();
+
+  requestAnimationFrame(() => {
+    modalPhotoTrack.scrollLeft = 0;
+    modalPhotoTrack.style.scrollBehavior = prevBehavior || "";
+    activeImageIndex = 0;
+    updateDots();
+  });
+}
+
 function openProductModal(watchId) {
   const watch = watches.find((w) => w.id === watchId);
   if (!watch) return;
@@ -355,9 +407,26 @@ function openProductModal(watchId) {
   activeWatch = watch;
   activeImageIndex = 0;
 
+  if (productModalCard) {
+    productModalCard.classList.toggle("is-sold-out", Boolean(watch.soldOut));
+  }
+  syncModalSoldOutBanner(Boolean(watch.soldOut));
+
   modalEyebrow.textContent = `${watch.brand} • ${watch.year}`;
   modalTitle.textContent = watch.name;
-  modalPrice.textContent = formatManualDualPrice(watch);
+
+  if (watch.soldOut) {
+    modalPrice.innerHTML = `<span class="modal-price-strike">${formatManualDualPrice(watch)}</span> <span class="modal-sold-out-tag">Sold Out</span>`;
+  } else {
+    modalPrice.textContent = formatManualDualPrice(watch);
+  }
+
+  if (modalContactBtn) {
+    modalContactBtn.textContent = watch.soldOut
+      ? "Sold Out — Inquire to Source Similar"
+      : "Contact Us";
+  }
+
   modalDescription.textContent = watch.description;
 
   renderModalGallery();
@@ -366,11 +435,14 @@ function openProductModal(watchId) {
   productModalBackdrop.classList.add("open");
   productModalBackdrop.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
-  modalPhotoTrack.scrollLeft = 0;
+  if (productModalCard) productModalCard.scrollTop = 0;
+
+  resetGalleryToFirstImage();
 }
 
 function closeProductModal() {
   resetAllSlideZooms();
+  resetGalleryToFirstImage();
   productModalBackdrop.classList.remove("open");
   productModalBackdrop.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
@@ -478,7 +550,7 @@ function renderModalGallery() {
       (_, idx) => `
       <button
         type="button"
-        class="gallery-dot ${idx === activeImageIndex ? "active" : ""}"
+        class="gallery-dot ${idx === 0 ? "active" : ""}"
         aria-label="View photo ${idx + 1}"
         onclick="scrollToGalleryIndex(${idx})"
       ></button>
