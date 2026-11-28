@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout — House of Kāla</title>
+  <link rel="icon" type="image/jpeg" href="images/favicon.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <span class="devanagari">काल</span>
+        <span class="brand-title">HOUSE OF KĀLA</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="index.html#catalog" class="nav-link">Archive</a></li>
+          <li class="nav-item"><a href="byo.html" class="nav-link">Build Your Own</a></li>
+          <li class="nav-item"><a href="heritage.html" class="nav-link">Heritage</a></li>
+          <li class="nav-item"><button type="button" class="nav-link" onclick="openInquiryModal({ sourceType: 'inquiry' })">Contact</button></li>
+          <li class="nav-item">
+            <a href="cart.html" class="nav-link" id="navCartLink">Cart</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="cart.html" class="mobile-cart-pill" id="mobileCartPill" aria-label="View Cart">Cart</a>
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu" aria-expanded="false" aria-controls="megaMenu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div class="mega-menu" id="megaMenu">
+      <div class="mega-menu-inner">
+        <div class="mega-col primary-col">
+          <span class="mega-label">Navigate</span>
+          <ul class="mega-page-list">
+            <li><a href="index.html#catalog" class="mega-page-link" onclick="closeMenu()">Archive</a></li>
+            <li><a href="cart.html" class="mega-page-link" id="mobileMenuCartLink" onclick="closeMenu()">Cart</a></li>
+            <li><a href="byo.html" class="mega-page-link" onclick="closeMenu()">Build Your Own</a></li>
+            <li><a href="heritage.html" class="mega-page-link" onclick="closeMenu()">Heritage</a></li>
+            <li><button type="button" class="mega-page-link" onclick="closeMenu(); openInquiryModal({ sourceType: 'inquiry' });">Contact</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+
+  <!-- Main Checkout Section -->
+  <main class="checkout-main">
+    <div class="checkout-header">
+      <div>
+        <p class="hero-eyebrow checkout-eyebrow">HOUSE OF KĀLA</p>
+        <h1 class="checkout-title">Checkout</h1>
+        <p class="checkout-subtitle" id="checkoutSubtitle">Review your timepieces and complete your order</p>
+      </div>
+      <div>
+        <a href="cart.html" class="checkout-back-link">← Back to Cart</a>
+      </div>
+    </div>
+
+    <div id="checkoutEmptyState" class="checkout-panel checkout-empty-state" style="display: none;">
+      <p class="checkout-empty-text">Your cart is empty.</p>
+      <a href="index.html#catalog" class="btn-primary">Explore The Archive</a>
+    </div>
+
+    <div id="checkoutContentGrid" class="checkout-layout">
+      <!-- Left: Shipping & Contact Form -->
+      <section class="checkout-panel">
+        <h2 class="checkout-panel-title">Delivery &amp; Client Details</h2>
+        <p class="checkout-panel-subtitle">We confirm dispatch and tracking directly with you after payment.</p>
+
+        <form id="checkoutForm" class="inquiry-form">
+          <div class="checkout-form-grid">
+            <div class="inquiry-field">
+              <label for="checkoutName">Full Name</label>
+              <input type="text" id="checkoutName" name="name" required placeholder="Your full name" />
+            </div>
+
+            <div class="inquiry-field">
+              <label for="checkoutEmail">Email Address</label>
+              <input type="email" id="checkoutEmail" name="email" required placeholder="you@example.com" />
+            </div>
+
+            <div class="inquiry-field">
+              <label for="checkoutPhone">Phone / WhatsApp</label>
+              <input type="tel" id="checkoutPhone" name="phone" required placeholder="+91 98765 43210" />
+            </div>
+
+            <div class="inquiry-field">
+              <label for="checkoutCountry">Country / Region</label>
+              <input type="text" id="checkoutCountry" name="country" required value="India" placeholder="Country" />
+            </div>
+
+            <div class="inquiry-field checkout-field-full">
+              <label for="checkoutAddress">Street Address &amp; Landmark</label>
+              <input type="text" id="checkoutAddress" name="address" required placeholder="House / Flat, Street, Area" />
+            </div>
+
+            <div class="inquiry-field">
+              <label for="checkoutCity">City</label>
+              <input type="text" id="checkoutCity" name="city" required placeholder="City" />
+            </div>
+
+            <div class="inquiry-field">
+              <label for="checkoutPostal">Postal / PIN Code</label>
+              <input type="text" id="checkoutPostal" name="postal" required placeholder="PIN / ZIP code" />
+            </div>
+
+            <div class="inquiry-field checkout-field-full">
+              <label for="checkoutNotes">Wrist Size or Strap Note (Optional)</label>
+              <textarea id="checkoutNotes" name="notes" placeholder="Any sizing or delivery instructions..."></textarea>
+            </div>
+          </div>
+
+          <p class="checkout-status-msg" id="checkoutStatusMsg" role="alert" style="display: none;"></p>
+
+          <button type="submit" class="btn-primary inquiry-submit-btn" id="placeOrderBtn">
+            Continue to Payment
+          </button>
+        </form>
+      </section>
+
+      <!-- Right: Order Summary -->
+      <aside class="checkout-panel">
+        <h2 class="checkout-panel-title">Order Summary</h2>
+        <p class="checkout-panel-subtitle" id="checkoutItemCount">0 items</p>
+
+        <div id="checkoutItemsList" class="checkout-items-list"></div>
+
+        <div class="checkout-totals">
+          <div class="checkout-total-row">
+            <span>Subtotal</span>
+            <span id="checkoutSubtotal">₹0 • $0</span>
+          </div>
+          <div class="checkout-total-row">
+            <span>Insured Dispatch</span>
+            <span>Included</span>
+          </div>
+          <div class="checkout-total-row final">
+            <span>Total</span>
+            <span id="checkoutTotal">₹0 • $0</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Order Confirmation View -->
+    <section id="checkoutSuccessPanel" class="checkout-panel checkout-success-box" style="display: none;">
+      <p class="hero-eyebrow checkout-eyebrow">ORDER CONFIRMED</p>
+      <h2>Thank You for Your Order</h2>
+      <p id="checkoutSuccessDetails" class="checkout-success-details"></p>
+      <a href="index.html#catalog" class="btn-primary">Return to Archive</a>
+    </section>
+  </main>
+
+  <!-- SHARED INQUIRY MODAL -->
+  <div class="inquiry-modal-backdrop" id="inquiryModalBackdrop" aria-hidden="true">
+    <div class="inquiry-modal-card" role="dialog" aria-modal="true" aria-labelledby="inquiryModalTitle">
+      <div class="modal-top-bar">
+        <button type="button" class="modal-close-btn" id="closeInquiryModalBtn" aria-label="Close contact form">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <span class="inquiry-eyebrow" id="inquiryEyebrow">HOUSE OF KĀLA</span>
+      <h2 class="inquiry-title" id="inquiryModalTitle">Get in Touch</h2>
+      <p class="inquiry-subtitle" id="inquirySubtitle">Share your details and preferred way to connect.</p>
+
+      <form class="inquiry-form" id="inquiryForm">
+        <input type="hidden" id="inquirySourceType" name="sourceType" value="inquiry" />
+        <input type="hidden" id="inquiryProductId" name="productId" value="" />
+        <input type="hidden" id="inquiryProductBrand" name="productBrand" value="" />
+        <input type="hidden" id="inquiryProductName" name="productName" value="" />
+        <input type="hidden" id="inquiryProductSpecs" name="productSpecs" value="" />
+
+        <div class="inquiry-field">
+          <label for="clientName">Name</label>
+          <input type="text" id="clientName" name="name" required placeholder="Your full name" />
+        </div>
+
+        <div class="inquiry-field">
+          <label for="clientEmail">Email</label>
+          <input type="email" id="clientEmail" name="email" placeholder="you@example.com" />
+        </div>
+
+        <div class="inquiry-field">
+          <label for="preferredContact">Preferred Method of Contact</label>
+          <select id="preferredContact" name="preferredContact" required>
+            <option value="Email">Email</option>
+            <option value="Phone Call">Phone Call</option>
+            <option value="WhatsApp">WhatsApp</option>
+          </select>
+        </div>
+
+        <div class="inquiry-field">
+          <label for="contactHandle">Phone / WhatsApp Number</label>
+          <input type="tel" id="contactHandle" name="phone" placeholder="+91 98765 43210" />
+        </div>
+
+        <div class="inquiry-field">
+          <label for="clientMessage">Note or Question (Optional)</label>
+          <textarea id="clientMessage" name="message" placeholder="Anything else you'd like to share..."></textarea>
+        </div>
+
+        <p class="inquiry-error" id="inquiryContactError" role="alert" style="display: none;"></p>
+
+        <button type="submit" class="btn-primary inquiry-submit-btn">Send Inquiry</button>
+      </form>
+
+      <div class="inquiry-confirmation" id="inquiryConfirmation" style="display: none;">
+        <h3>Inquiry Noted</h3>
+        <p id="inquiryConfirmationText">Thank you—we have captured your request and will reach out via your preferred channel.</p>
+        <button type="button" class="btn-primary" id="inquiryDoneBtn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="devanagari">काल</span>
+        <h3>HOUSE OF KĀLA</h3>
+        <p>Preserving mechanical heritage in India &amp; beyond.</p>
+      </div>
+      <div class="footer-note">
+        <p>&copy; 2026 House of Kāla. Every timepiece authenticated &amp; serviced.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="cart.js"></script>
+  <script src="inquiry.js"></script>
+  <script>
+    // Replace with your live/test Razorpay Key ID
+    const RAZORPAY_KEY_ID = "rzp_test_YourKeyHere";
+
+    function getCheckoutTotals() {
+      const cart = typeof getHouseOfKalaCart === "function" ? getHouseOfKalaCart() : [];
+      let totalInr = 0;
+      let totalUsd = 0;
+      cart.forEach((item) => {
+        const qty = Number(item.quantity) || 1;
+        totalInr += (Number(item.unitInr) || 0) * qty;
+        totalUsd += (Number(item.unitUsd) || 0) * qty;
+      });
+      return { cart, totalInr, totalUsd };
+    }
+
+    function renderCheckoutSummary() {
+      if (typeof syncCartCounters === "function") syncCartCounters();
+
+      const { cart, totalInr, totalUsd } = getCheckoutTotals();
+      const emptyState = document.getElementById("checkoutEmptyState");
+      const contentGrid = document.getElementById("checkoutContentGrid");
+      const successPanel = document.getElementById("checkoutSuccessPanel");
+      const itemsList = document.getElementById("checkoutItemsList");
+      const itemCountEl = document.getElementById("checkoutItemCount");
+      const subtotalEl = document.getElementById("checkoutSubtotal");
+      const totalEl = document.getElementById("checkoutTotal");
+
+      if (successPanel && successPanel.style.display === "block") return;
+
+      if (!cart.length) {
+        if (emptyState) emptyState.style.display = "block";
+        if (contentGrid) contentGrid.style.display = "none";
+        return;
+      }
+
+      if (emptyState) emptyState.style.display = "none";
+      if (contentGrid) contentGrid.style.display = "grid";
+
+      const totalQty = typeof getCartTotalCount === "function" ? getCartTotalCount(cart) : cart.length;
+      if (itemCountEl) {
+        itemCountEl.textContent = `${totalQty} ${totalQty === 1 ? "timepiece" : "timepieces"}`;
+      }
+
+      if (itemsList) {
+        itemsList.innerHTML = cart
+          .map((item) => {
+            const qty = Number(item.quantity) || 1;
+            const lineInr = (Number(item.unitInr) || 0) * qty;
+            const lineUsd = (Number(item.unitUsd) || 0) * qty;
+            return `
+              <div class="checkout-item-row">
+                <img src="${item.image || ""}" alt="${item.name}" class="checkout-item-thumb" />
+                <div class="checkout-item-info">
+                  <div class="checkout-item-name">${item.name} × ${qty}</div>
+                  <div class="checkout-item-meta">${item.brand} • Strap: ${item.strapLabel || "Standard"}</div>
+                </div>
+                <div class="checkout-item-price">
+                  ${typeof formatDualCurrency === "function"
+                    ? formatDualCurrency(lineInr, lineUsd)
+                    : `₹${lineInr.toLocaleString("en-IN")} • $${lineUsd.toLocaleString("en-US")}`}
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      const formatted =
+        typeof formatDualCurrency === "function"
+          ? formatDualCurrency(totalInr, totalUsd)
+          : `₹${totalInr.toLocaleString("en-IN")} • $${totalUsd.toLocaleString("en-US")}`;
+
+      if (subtotalEl) subtotalEl.textContent = formatted;
+      if (totalEl) totalEl.textContent = formatted;
+    }
+
+    function launchBackgroundRazorpay(customerData, totals) {
+      const statusEl = document.getElementById("checkoutStatusMsg");
+      if (typeof window.Razorpay !== "function") {
+        if (statusEl) {
+          statusEl.textContent = "Payment gateway is still loading—please try again in a moment.";
+          statusEl.style.display = "block";
+        }
+        return;
+      }
+
+      const amountPaise = Math.max(100, Math.round((Number(totals.totalInr) || 0) * 100));
+
+      const options = {
+        key: RAZORPAY_KEY_ID,
+        amount: amountPaise,
+        currency: "INR",
+        name: "House of Kāla",
+        description: "Vintage & Custom Timepiece Order",
+        prefill: {
+          name: customerData.name,
+          email: customerData.email,
+          contact: customerData.phone
+        },
+        notes: {
+          address: `${customerData.address}, ${customerData.city}, ${customerData.postal}, ${customerData.country}`,
+          clientNotes: customerData.notes || ""
+        },
+        theme: {
+          color: "#7A1318"
+        },
+        handler: function (response) {
+          const paymentId = (response && response.razorpay_payment_id) || "CONFIRMED";
+          if (typeof clearHouseOfKalaCart === "function") {
+            clearHouseOfKalaCart();
+          }
+          const contentGrid = document.getElementById("checkoutContentGrid");
+          const successPanel = document.getElementById("checkoutSuccessPanel");
+          const successDetails = document.getElementById("checkoutSuccessDetails");
+
+          if (contentGrid) contentGrid.style.display = "none";
+          if (successPanel) successPanel.style.display = "block";
+          if (successDetails) {
+            successDetails.textContent = `Thank you, ${customerData.name}. Your payment reference is ${paymentId}. We will send dispatch details to ${customerData.email}.`;
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            if (statusEl) {
+              statusEl.textContent = "Payment window closed before completion. Your cart is still saved.";
+              statusEl.style.display = "block";
+            }
+          }
+        }
+      };
+
+      const rzpInstance = new window.Razorpay(options);
+      rzpInstance.open();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderCheckoutSummary();
+
+      const form = document.getElementById("checkoutForm");
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const statusEl = document.getElementById("checkoutStatusMsg");
+          if (statusEl) statusEl.style.display = "none";
+
+          const totals = getCheckoutTotals();
+          if (!totals.cart.length) {
+            if (statusEl) {
+              statusEl.textContent = "Your cart is empty.";
+              statusEl.style.display = "block";
+            }
+            return;
+          }
+
+          const customerData = {
+            name: document.getElementById("checkoutName").value.trim(),
+            email: document.getElementById("checkoutEmail").value.trim(),
+            phone: document.getElementById("checkoutPhone").value.trim(),
+            country: document.getElementById("checkoutCountry").value.trim(),
+            address: document.getElementById("checkoutAddress").value.trim(),
+            city: document.getElementById("checkoutCity").value.trim(),
+            postal: document.getElementById("checkoutPostal").value.trim(),
+            notes: document.getElementById("checkoutNotes").value.trim()
+          };
+
+          launchBackgroundRazorpay(customerData, totals);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

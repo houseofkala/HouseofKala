@@ -32,6 +32,9 @@
           <li class="nav-item"><a href="byo.html" class="nav-link">Build Your Own</a></li>
           <li class="nav-item"><a href="heritage.html" class="nav-link">Heritage</a></li>
           <li class="nav-item"><button type="button" class="nav-link" onclick="openInquiryModal({ sourceType: 'inquiry' })">Contact</button></li>
+          <li class="nav-item">
+            <a href="cart.html" class="nav-link cart-nav-link" id="navCartLink">Cart</a>
+          </li>
         </ul>
       </nav>
 
@@ -44,6 +47,7 @@
             </svg>
           </button>
         </span>
+        <a href="cart.html" class="mobile-cart-pill" id="mobileCartPill" aria-label="View Cart">Cart</a>
         <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu" aria-expanded="false" aria-controls="megaMenu">
           <span></span>
           <span></span>
@@ -59,7 +63,9 @@
           <ul class="mega-primary-list">
             <li><button type="button" onclick="selectBrandFromMenu('all')">All Watchmakers</button></li>
             <li><button type="button" onclick="selectBrandFromMenu('Citizen')">Citizen</button></li>
+            <li><button type="button" onclick="selectBrandFromMenu('Enicar')">Enicar</button></li>
             <li><button type="button" onclick="selectBrandFromMenu('Favre-Leuba')">Favre-Leuba</button></li>
+            <li><button type="button" onclick="selectBrandFromMenu('Henri Sandoz & Fils')">Henri Sandoz &amp; Fils</button></li>
             <li><button type="button" onclick="selectBrandFromMenu('HMT')">HMT (Hindustan Machine Tools)</button></li>
             <li><button type="button" onclick="selectBrandFromMenu('Hoga')">Hoga</button></li>
             <li><button type="button" onclick="selectBrandFromMenu('Orient')">Orient</button></li>
@@ -67,10 +73,11 @@
           </ul>
         </div>
 
-        <!-- Mobile-only navigation links for BYO, Heritage & Contact -->
+        <!-- Mobile-only navigation links for BYO, Heritage, Cart & Contact -->
         <div class="mega-col mobile-pages-col">
           <span class="mega-label">Pages</span>
           <ul class="mega-page-list">
+            <li><a href="cart.html" class="mega-page-link" id="mobileMenuCartLink" onclick="closeMenu()">Cart</a></li>
             <li><a href="byo.html" class="mega-page-link" onclick="closeMenu()">Build Your Own</a></li>
             <li><a href="heritage.html" class="mega-page-link" onclick="closeMenu()">Heritage</a></li>
             <li><button type="button" class="mega-page-link" onclick="closeMenu(); openInquiryModal({ sourceType: 'inquiry' });">Contact</button></li>
@@ -97,7 +104,7 @@
     <div class="catalog-header">
       <div>
         <h2 class="section-title" id="catalogHeading">All Timepieces</h2>
-        <p class="item-count" id="itemCount">Showing 7 curated watches</p>
+        <p class="item-count" id="itemCount">Showing 21 curated watches</p>
       </div>
 
       <div class="utility-filters">
@@ -179,7 +186,7 @@
           <div class="gallery-dots" id="galleryDots"></div>
         </div>
 
-        <!-- Right Side: Full Information, Divider-Separated Specs & Contact Button -->
+        <!-- Right Side: Full Information, Specs, 4-Option Strap Selector & Add to Cart -->
         <div class="modal-details-col">
           <span class="modal-eyebrow" id="modalEyebrow">CURATED ARCHIVE</span>
           <h2 class="modal-title" id="modalTitle">Watch Name</h2>
@@ -188,14 +195,34 @@
 
           <div class="modal-specs-list" id="modalSpecsList"></div>
 
+          <!-- 4-Option Strap Selector -->
+          <div class="modal-strap-section" id="modalStrapSection">
+            <label for="modalStrapSelect" class="modal-strap-label">Select Strap</label>
+            <select id="modalStrapSelect" class="modal-strap-select" onchange="handleModalStrapChange()"></select>
+            <p class="modal-strap-note" id="modalStrapNote"></p>
+          </div>
+
           <button
             type="button"
             class="btn-primary modal-contact-btn"
-            id="modalContactBtn"
-            onclick="if (activeWatch) openInquiryModalForProduct(activeWatch.id);"
+            id="modalAddToCartBtn"
+            onclick="handleModalPrimaryAction()"
           >
-            Contact Us
+            Add to Cart
           </button>
+
+          <div class="modal-secondary-actions" id="modalSecondaryActions">
+            <button
+              type="button"
+              class="modal-secondary-link"
+              onclick="if (activeWatch) openInquiryModalForProduct(activeWatch.id);"
+            >
+              Questions? Inquire About This Watch
+            </button>
+            <a href="cart.html" class="modal-secondary-link" id="modalViewCartLink" style="display: none;">
+              View Cart →
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -217,7 +244,6 @@
       <p class="inquiry-subtitle" id="inquirySubtitle">Share your details and preferred way to connect.</p>
 
       <form class="inquiry-form" id="inquiryForm">
-        <!-- Hidden context metadata for backend routing -->
         <input type="hidden" id="inquirySourceType" name="sourceType" value="inquiry" />
         <input type="hidden" id="inquiryProductId" name="productId" value="" />
         <input type="hidden" id="inquiryProductBrand" name="productBrand" value="" />
@@ -280,6 +306,7 @@
     </div>
   </footer>
 
+  <script src="cart.js"></script>
   <script src="script.js"></script>
   <script src="inquiry.js"></script>
 </body>

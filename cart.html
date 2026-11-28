@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Cart — House of Kāla</title>
+  <link rel="icon" type="image/jpeg" href="images/favicon.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="nav-container">
+      <a href="index.html" class="brand-logo">
+        <span class="devanagari">काल</span>
+        <span class="brand-title">HOUSE OF KĀLA</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Primary Navigation">
+        <ul class="nav-list">
+          <li class="nav-item"><a href="index.html#catalog" class="nav-link">Home</a></li>
+          <li class="nav-item"><a href="byo.html" class="nav-link">Build Your Own</a></li>
+          <li class="nav-item"><a href="heritage.html" class="nav-link">Heritage</a></li>
+          <li class="nav-item"><button type="button" class="nav-link" onclick="openInquiryModal({ sourceType: 'inquiry' })">Contact</button></li>
+          <li class="nav-item">
+            <a href="cart.html" class="nav-link active" aria-current="page" id="navCartLink">Cart</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="cart.html" class="mobile-cart-pill" id="mobileCartPill" aria-label="View Cart">Cart</a>
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Menu" aria-expanded="false" aria-controls="megaMenu">
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation Dropdown -->
+    <div class="mega-menu" id="megaMenu">
+      <div class="mega-menu-inner">
+        <div class="mega-col primary-col">
+          <span class="mega-label">Navigate</span>
+          <ul class="mega-page-list">
+            <li><a href="index.html#catalog" class="mega-page-link" onclick="closeMenu()">Archive</a></li>
+            <li><a href="byo.html" class="mega-page-link" onclick="closeMenu()">Build Your Own</a></li>
+            <li><a href="heritage.html" class="mega-page-link" onclick="closeMenu()">Heritage</a></li>
+            <li><button type="button" class="mega-page-link" onclick="closeMenu(); openInquiryModal({ sourceType: 'inquiry' });">Contact</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu-backdrop" id="menuBackdrop"></div>
+
+  <!-- Main Cart Section -->
+  <main class="catalog-section cart-main">
+    <div class="catalog-header">
+      <div>
+        <p class="hero-eyebrow cart-eyebrow">CURATED SELECTION</p>
+        <h1 class="section-title">Shopping Cart</h1>
+        <p class="item-count" id="cartItemSummary">0 items in cart</p>
+      </div>
+      <div>
+        <a href="index.html#catalog" class="nav-link cart-back-link">← Continue Browsing</a>
+      </div>
+    </div>
+
+    <div id="cartItemsContainer" class="watch-grid"></div>
+
+    <section id="cartSummaryPanel" class="cart-summary-panel" style="display: none;">
+      <div class="cart-summary-bar">
+        <div>
+          <p class="card-meta cart-subtotal-label">Estimated Subtotal (Including Strap Add-Ons)</p>
+          <p class="card-price cart-subtotal" id="cartSubtotalDisplay">₹0 • $0</p>
+        </div>
+        <div class="cart-summary-actions">
+          <button type="button" class="nav-link cart-clear-btn" onclick="clearHouseOfKalaCart()">
+            Clear Cart
+          </button>
+          <a href="checkout.html" class="btn-primary">Proceed to Checkout</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- SHARED INQUIRY MODAL -->
+  <div class="inquiry-modal-backdrop" id="inquiryModalBackdrop" aria-hidden="true">
+    <div class="inquiry-modal-card" role="dialog" aria-modal="true" aria-labelledby="inquiryModalTitle">
+      <div class="modal-top-bar">
+        <button type="button" class="modal-close-btn" id="closeInquiryModalBtn" aria-label="Close contact form">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <span class="inquiry-eyebrow" id="inquiryEyebrow">HOUSE OF KĀLA</span>
+      <h2 class="inquiry-title" id="inquiryModalTitle">Get in Touch</h2>
+      <p class="inquiry-subtitle" id="inquirySubtitle">Share your details and preferred way to connect.</p>
+
+      <form class="inquiry-form" id="inquiryForm">
+        <input type="hidden" id="inquirySourceType" name="sourceType" value="inquiry" />
+        <input type="hidden" id="inquiryProductId" name="productId" value="" />
+        <input type="hidden" id="inquiryProductBrand" name="productBrand" value="" />
+        <input type="hidden" id="inquiryProductName" name="productName" value="" />
+        <input type="hidden" id="inquiryProductSpecs" name="productSpecs" value="" />
+
+        <div class="inquiry-field">
+          <label for="clientName">Name</label>
+          <input type="text" id="clientName" name="name" required placeholder="Your full name" />
+        </div>
+
+        <div class="inquiry-field">
+          <label for="clientEmail">Email</label>
+          <input type="email" id="clientEmail" name="email" placeholder="you@example.com" />
+        </div>
+
+        <div class="inquiry-field">
+          <label for="preferredContact">Preferred Method of Contact</label>
+          <select id="preferredContact" name="preferredContact" required>
+            <option value="Email">Email</option>
+            <option value="Phone Call">Phone Call</option>
+            <option value="WhatsApp">WhatsApp</option>
+          </select>
+        </div>
+
+        <div class="inquiry-field">
+          <label for="contactHandle">Phone / WhatsApp Number</label>
+          <input type="tel" id="contactHandle" name="phone" placeholder="+91 98765 43210" />
+        </div>
+
+        <div class="inquiry-field">
+          <label for="clientMessage">Note or Question (Optional)</label>
+          <textarea id="clientMessage" name="message" placeholder="Anything else you'd like to share..."></textarea>
+        </div>
+
+        <p class="inquiry-error" id="inquiryContactError" role="alert" style="display: none;"></p>
+
+        <button type="submit" class="btn-primary inquiry-submit-btn">Send Inquiry</button>
+      </form>
+
+      <div class="inquiry-confirmation" id="inquiryConfirmation" style="display: none;">
+        <h3>Inquiry Noted</h3>
+        <p id="inquiryConfirmationText">Thank you—we have captured your request and will reach out via your preferred channel.</p>
+        <button type="button" class="btn-primary" id="inquiryDoneBtn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="devanagari">काल</span>
+        <h3>HOUSE OF KĀLA</h3>
+        <p>Preserving mechanical heritage in India &amp; beyond.</p>
+      </div>
+      <div class="footer-note">
+        <p>&copy; 2026 House of Kāla. Every timepiece authenticated &amp; serviced.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="cart.js"></script>
+  <script src="inquiry.js"></script>
+</body>
+</html>
